@@ -20,3 +20,4 @@ The libraries used to implement the face recognition features are:
 A simulation of the possible interactions developed with Peppers is showed in the video linked below.
 
 ## [Report](https://github.com/kevinmunda/HRI-Project/blob/06623daf6af4fb0cd5df0fc51b802bd5d6c552f0/HRI%20-%20Report.pdf)
+## [Video](https://github.com/kevinmunda/HRI-Project/blob/8cb570d8e31e5b37d4479d1d53469f8ef54d43ab/HRI%20-%20Video.mp4)

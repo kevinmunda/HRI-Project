@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv='cache-control' content='no-cache, no-store, must-revalidate'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    <title>PEPPER APPLICATION - User Registration</title>
+    <style>
+        body {
+            background: lightblue;
+        }
+
+        .container {
+            width: 500px;
+            height: 500px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .row {
+            text-align: left;
+        }
+
+        .word {
+            display: inline-block;
+            font-size: 20px;
+        }
+
+        .btn {
+            background: lightgreen;
+            height: 100px;
+            width: 150px;
+            font-size: 20px;
+            text-align:center;
+            margin-top: 150px;
+            margin-left: 20%;
+            border-radius: 15px;
+        }
+
+        .second {
+            position: relative;
+            top: 315px;
+            right: 430px;
+        }
+
+        #menu{
+            height: 100px;
+            width: 100px;
+            position: fixed;
+            margin-right: 5%;
+            margin-top: 5%;
+            right: 0px;
+            top: 0px;
+            border-radius: 15px;
+            background-color: lightyellow;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        var counter = 0;
+        var name = "";
+        var surname = "";
+        function requestData() {
+            $.ajax({
+                type: "GET",
+                url: '/userRegistration',
+                success: function(data){
+                    var result = $.trim(data);
+                    if(result === "")
+                        setTimeout(requestData, 2000);
+                    else if(counter == 0) {
+                        name = result;
+                        tag = document.getElementById('name');
+                        tag.innerHTML = name;
+                        counter += 1;
+                        setTimeout(requestData, 2000);
+                    }
+                    else if(counter == 1) {
+                        surname = result;
+                        if (name === surname) {
+                            setTimeout(requestData, 2000);
+                        }
+                        else {
+                            tag = document.getElementById('surname');
+                            tag.innerHTML = surname;
+                            document.getElementById("confirmDataId").style.display = "block";
+                        }
+                    }
+                }
+            })
+        }
+
+        $(document).ready(function(){
+            setTimeout(requestData, 2000);
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            document.getElementById('confirmDataId').style.display = "none";
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <form action="/menu" method="POST" id="menu_form" name="menu_form">
+            <button id="menu" type="submit">Return to services</button>
+        </form>
+
+        <fieldset>
+            <legend>User Photo and Info</legend>
+            <!-- ?random="+new Date().getTime(); -->
+            <img src="../static/current_photo.jpg?random="+new Date().getTime();>
+            <div class="row">
+                <h12 class="word">Name: </h12>
+                <h1 id="name" class="word"></h1>
+            </div>
+            <div class="row">
+                <h12 class="word">Surname: </h12>
+                <h1 id="surname" class="word"></h1>
+            </div>
+        </fieldset>
+        <div class="second">
+            <form action="/confirmData" method="POST" id="confirmDataFormId" name="confirmData">
+                <button id="confirmDataId" class="btn" type="submit">Confirm Data</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

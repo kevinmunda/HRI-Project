@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+
+    <title>PEPPER APPLICATION - Order</title>
+    <style>
+        body {
+            background: lightblue;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .row {
+            text-align: center;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn {
+            background: lightgreen;
+            height: 100px;
+            width: 150px;
+            font-size: 20px;
+            text-align: center;
+            margin-top: 10px;
+            margin-left: 20%;
+            border-radius: 15px;
+        }
+
+        .check-btn {
+            margin-bottom: 100px;
+            margin-right: 100px;
+            text-align: center;
+            border-style: double;
+            border-width: 3px;
+            border-color: purple;
+            border-radius: 10px;
+            padding-right: 25px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        #menu{
+            height: 100px;
+            width: 100px;
+            position: fixed;
+            margin-right: 5%;
+            margin-top: 5%;
+            right: 0px;
+            top: 0px;
+            border-radius: 15px;
+            background-color: lightyellow;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function getMenu(){
+            $.ajax({
+                type: 'GET',
+                url: '/order',
+                success: function(data){
+                    var menu = data;
+                    dishes = menu.split("/");
+                    for(i=0; i < dishes.length; i++){
+                        id = 'label' + i.toString();
+                        document.getElementById(id).innerHTML = dishes[i];
+                    }
+                }
+            })
+        }
+
+        $(document).ready(function(){
+            getMenu();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <form action="/menu" method="POST" id="menu_form" name="menu_form">
+            <button id="menu" type="submit">Return to services</button>
+        </form>
+
+        <form action="/confirmOrder" method="POST" id="confirmOrderForm" name="confirmOrderForm">
+            <div class="row">
+                <div class="check-btn">
+                    <input type="checkbox" id="0" name="dish" value="0">
+                    <label for="0" id="label0" class="label">0</label>
+                </div>
+                <div class="check-btn">
+                    <input type="checkbox" id="1" name="dish" value="1">
+                    <label for="1" id="label1" class="label">1</label>
+                </div>
+                <div class="check-btn">
+                    <input type="checkbox" id="2" name="dish" value="2">
+                    <label for="2" id="label2" class="label">2</label>
+                </div>
+                <div class="check-btn">
+                    <input type="checkbox" id="3" name="dish" value="3">
+                    <label for="3" id="label3" class="label">3</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="check-btn">
+                    <input type="checkbox" id="4" name="dish" value="4">
+                    <label for="4" id="label4" class="label">4</label>
+                </div>
+                <div class="check-btn">
+                    <input type="checkbox" id="5" name="dish" value="5">
+                    <label for="5" id="label5" class="label">5</label>
+                </div>
+                <div class="check-btn">
+                    <input type="checkbox" id="6" name="dish" value="6">
+                    <label for="6" id="label6" class="label">6</label>
+                </div>
+                <div class="check-btn">
+                    <input type="checkbox" id="7" name="dish" value="7">
+                    <label for="7" id="label7" class="label">7</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="check-btn">
+                    <input type="checkbox" id="8" name="dish" value="8">
+                    <label for="8" id="label8" class="label">8</label>
+                </div>
+                <div class="check-btn">
+                    <input type="checkbox" id="9" name="dish" value="9">
+                    <label for="9" id="label9" class="label">9</label>
+                </div>
+                <div class="check-btn">
+                    <input type="checkbox" id="10" name="dish" value="10">
+                    <label for="10" id="label10" class="label">10</label>
+                </div>
+                <div class="check-btn">
+                    <input type="checkbox" id="11" name="dish" value="11">
+                    <label for="11" id="label11" class="label">11</label>
+                </div>
+            </div>
+            <div class="row">
+                <button id="confirmOrderId" class="btn" type="submit">Confirm Order</button>
+            </div>
+        </form>
+        {% if name %}
+        <button id="lastOrderId" class="btn">Get Last Order</button>
+        {% endif %}
+    </div>
+
+    <script>
+        document.getElementById('lastOrderId').addEventListener("click", getLastOrder);
+
+        function getLastOrder(){
+            $.ajax({
+                type: 'GET',
+                url: '/getLastOrder',
+                success: function(data){
+                    var indexList = data;
+                    if (indexList == "")
+                        console.log("NoPreviousOrder");
+                    else {
+                        indices = indexList.split('-');
+                        for(i=0; i < indices.length; i++){
+                            id = indices[i];
+                            document.getElementById(id).checked = true;
+                        }
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>

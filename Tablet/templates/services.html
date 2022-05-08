@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>PEPPER APPLICATION - Services</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            background: lightblue;
+        }
+
+        .container {
+            width: 500px;
+            height: 500px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .row {
+            text-align: center;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn {
+            margin-left: 50px;
+            margin-right: 50px;
+            width: 150px;
+            height: 80px;
+            display: inline-block;
+        }
+
+        #quit{
+            height: 50px;
+            width: 50px;
+            position: fixed;
+            margin-right: 5%;
+            margin-top: 5%;
+            right: 0px;
+            top: 0px;
+            border-radius: 100%;
+            background-color: red;
+        }
+    </style>
+    <script>
+        function clickButton(id) {
+            document.getElementById(id).click();
+        }
+
+        function request() {
+            $.ajax({
+                type: "GET",
+                url: '/services',
+                success: function(data){
+                    var result = $.trim(data);
+                    if(result === 'faceReg')
+                        clickButton("faceReg");
+                    else if (result === 'faceRec')
+                        clickButton("faceRec");
+                    else if (result === 'order')
+                        clickButton("order");
+                    else if (result === 'game')
+                        clickButton("game");
+                }
+            })
+            setTimeout(request, 2000);
+        }
+
+        $(document).ready(function(){
+            setTimeout(request, 2000);
+        });
+    </script>
+</head>
+
+<body>
+    <form action="/shutdown" method="POST" id="quit_form" name="quit_form">
+        <button id="quit" type="submit">X</button>
+    </form>
+
+    <div class="container">
+        <div class="row">
+            {% if name %}
+            <h1>Welcome back, {{name}}!</h1>
+            {% endif %}
+        </div>
+        <div class="row">
+            <form action="/faceRegistration" method="POST" id="first_form" name="first_form">
+                <button id="faceReg" class="btn" type="submit">Face Registration</button>
+            </form>
+            <form action="/faceRecognition" method="POST" id="second_form" name="second_form">
+                <button id="faceRec" class="btn" type="submit">Face Recognition</button>
+            </form>
+        </div>
+        <div class="row">
+            <form action="/order" method="POST" id="third_form" name="third_form">
+                <button id="order" class="btn" type="submit">Order</button>
+            </form>
+            <form action="/game" method="POST" id="fourth_form" name="fourth_form">
+                <button id="game" class="btn" type="submit">Game</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
